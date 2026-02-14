@@ -1,68 +1,71 @@
 # Day 04 – Linux Fundamentals (Hands-On): Processes and Services
 
-To practice core Linux fundamentals by running real commands, observing system behavior, and understanding basic troubleshooting steps.
+🔎 1. Process Checks
+✅ Command 1: Check running processes
 
-Q1)- Check running processes
+    ps aux | head
+    👉 Shows currently running processes.
 
-    **ps aux | head -5**
+✅ Command 2: Find specific process
 
-    Observation: System processes are running under root.
-    Shows user, PID, CPU usage, memory usage, and command name
-
-- Check Specific Process
-  **pgrep ssh**
-
-  Observation: SSH service is running with PID 845.
-
-  **top**
-
-  Observation: Shows live system performance
-
-  Helps identify high CPU or memory consuming processes.
-
-  Why this matters: Used daily to monitor applications, detect stuck processes, and troubleshoot performance issues.
-
-Q2)- Inspect one systemd service
-
-    **Check Service Status**
-    systemctl status ssh
-
-    Observation: SSH service is active and running.
-
-    **List Running Services**
-    systemctl list-units --type=service --state=running\
-
-    Observation: Multiple system services are running.
-
-    **Check Service Logs**
-    journalctl -u ssh --no-pager | tail -5
-
-    O/P:-Accepted password for user from 192.168.1.10
-    Observation: SSH login activity recorded.
-
-    **View System Logs**
-    tail -n 10 /var/log/syslog
-
-    Observation: System logs show recent session activity.
-
-Q3)- Capture a small troubleshooting flow
-
-Scenario: SSH not working
-
-1.  Check if process is running:
     pgrep ssh
+    👉 Confirms ssh service process is running.
 
-2.  Check service status:
-    systemctl status ssh
+✅ Command 3: Live process monitoring
 
-3.  If failed, restart:
-    sudo systemctl restart ssh
+    top
+    👉 Real-time CPU & memory usage.
 
-4.  Check logs:
-    journalctl -u ssh -n 20
+⚙️ 2. Service Checks (Using ssh service)
 
-- Processes can be checked using ps, pgrep
-- Services are managed using systemctl
-- Logs help identify real issues
-- Troubleshooting follows a logical flow:
-  **Process → Service → Logs → Restart**
+✅ Command 4: Check service status
+
+    sudo systemctl status ssh
+    👉 Confirms service is active.
+
+✅ Command 5: List all running services
+
+    systemctl list-units --type=service --state=running
+
+    Output (sample):
+
+    cron.service        loaded active running
+    ssh.service         loaded active running
+    systemd-journald.service loaded active running
+    👉 Shows all active services.
+
+📜 3. Log Checks
+
+✅ Command 6: View last 50 lines of system log
+
+    sudo journalctl -u ssh -n 50
+    👉 Shows recent ssh activity.
+
+✅ Command 7: Monitor logs live
+
+    sudo journalctl -u cron -f
+    👉 Live monitoring for troubleshooting.
+
+✅ Command 8: Check generic log file
+
+    tail -n 50 /var/log/syslog
+    👉 Shows last 50 log entries.
+
+🛠 Mini Troubleshooting Practice
+
+    Scenario: Cron job not running
+
+    Step 1: Check if process exists
+      pgrep cron
+
+    Step 2: Check service status
+      sudo systemctl status cron
+
+    If inactive:
+      sudo systemctl start cron
+
+    Step 3: Check logs for errors
+      sudo journalctl -u cron -n 20
+
+    Step 4: Verify cron jobs
+      crontab -l
