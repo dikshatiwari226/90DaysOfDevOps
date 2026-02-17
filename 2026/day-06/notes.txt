@@ -1,0 +1,6 @@
+Line 1: Hey, I am Diksha Tiwari
+Line 2: I m working in SD
+Line 3: I am started learning Devops
+Line 4: cat reads full file
+Line 5: head shows start
+Line 6: tail shows end
