@@ -1,81 +1,106 @@
 # Day 05 – Linux Troubleshooting Drill: CPU, Memory, and Logs
 
-🔥 STEP 0 — Pick Your Target Service
+🧾 Environment Basics
 
-First check running services:
+    1️⃣ Kernel Info
+          uname -a
+          Observation: Standard Linux kernel, no anomalies.
 
-systemctl list-units --type=service --state=running
+    2️⃣ OS Version
+          cat /etc/os-release
+          Observation: LTS release → stable production-like environment.
 
-👉 Pick ONE service (recommended: ssh or cron).
+📁 Filesystem Sanity
 
-Let’s assume you choose:
+    3️⃣ Create demo folder
+          mkdir /tmp/runbook-demo
+          Observation: Directory created successfully.
 
-ssh.service
+    4️⃣ Copy test file
+          cp /etc/hosts /tmp/runbook-demo/hosts-copy && ls -l /tmp/runbook-demo
+          Observation: Filesystem writable, permissions healthy
 
-Write this in your runbook:
+🧠 Snapshot: CPU & Memory
 
-Target Service: ssh.service
+    5️⃣ Memory usage
+          free -h
+          Observation: No memory pressure.
 
-✅ STEP 1 — Environment Basics (2 Commands)
-1️⃣ Run:
-uname -a
+    6️⃣ SSH process usage
+          pgrep sshd
+          ps -o pid,pcpu,pmem,comm -p <PID>
+          Observation: sshd consuming negligible CPU/memory.
 
-Observe:
+💾 Snapshot: Disk & IO
 
-Kernel version
+    7️⃣ Disk usage
+        df -h
+        Observation: Disk utilization normal (<80%).
 
-Architecture (x86_64)
+    8️⃣ Log directory size
+        du -sh /var/log
+        Observation: Logs not bloated.
 
-Hostname
+🌐 Snapshot: Network
 
-Write:
+    9️⃣ Check listening ports
 
-Kernel: 5.x.x
-Arch: x86_64
-System running normally
+        ss -tulpn | grep ssh
+        Observation: SSH listening on port 22 as expected.
 
-2️⃣ Run:
-cat /etc/os-release
+    🔟 Connectivity test
+        ping -c 2 google.com
+        Observation: Network connectivity working.
 
-Observe:
+📜 Logs Reviewed
 
-OS name (Ubuntu 22.04 etc.)
+    1️⃣1️⃣ SSH service logs
+          sudo journalctl -u ssh -n 50
+          Observation: Successful login entries, no recent failures.
 
-Version
+    1️⃣2️⃣ System logs
 
-Write:
+          tail -n 50 /var/log/auth.log
+          Observation: Authentication logs normal, no brute-force attempts.
 
-OS: Ubuntu 22.04 LTS
-Version confirmed
+    <!-- ------------------------------ -->
 
-✅ STEP 2 — Filesystem Sanity Check (2 Commands)
-Run:
-mkdir /tmp/runbook-demo
+      🚨 If This Worsens (Next Steps)
+      1️⃣ Restart SSH safely
+      sudo systemctl restart ssh
+      sudo systemctl status ssh
 
-4️⃣ Run:
-cp /etc/hosts /tmp/runbook-demo/hosts-copy
-ls -l /tmp/runbook-demo
+      ⚠️ Ensure alternate access (console) before restarting remotely.
 
-Observe:
+      2️⃣ Increase logging visibility
+      sudo journalctl -u ssh -f
 
-Folder created
+      Watch for:
 
-File copied
+      Failed logins
 
-Permissions visible
-![alt text](image.png)
+      Port binding issues
 
-STEP 3 — CPU & Memory Snapshot
-5️⃣ Get PID of service:
-pgrep ssh
+      3️⃣ Deep Debugging
 
-Copy the PID.
+      Check config:
 
-6️⃣ Check CPU & Memory usage:
-ps -o pid,pcpu,pmem,comm -p <PID>
+      sudo sshd -t
 
-Observe:
+      Inspect active sessions:
 
-CPU < 5% → normal
+      who
 
-Memory low → normal
+      Trace process:
+
+      sudo strace -p <sshd-pid>
+
+      🧠 Interview-Ready Summary
+
+      If asked:
+
+      How do you troubleshoot SSH issues on Linux?
+
+      Answer:
+
+      I verify environment basics, ensure SSH is running, check CPU/memory and disk health, confirm port 22 is listening using ss, and analyze authentication logs using journalctl and /var/log/auth.log.
