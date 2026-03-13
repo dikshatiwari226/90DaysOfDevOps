@@ -1,8 +1,8 @@
-<!-- #Task 2: Hello Workflow -->
+### Task 2: Hello Workflow
 
 ![alt text](image.png)
 
-<!-- Task 3: Understand the Anatomy -->
+### Task 3: Understand the Anatomy
 
 | Key       | Purpose                         |
 | --------- | ------------------------------- |
@@ -14,11 +14,11 @@
 | `run`     | Executes shell commands         |
 | `name`    | Describes a step in logs        |
 
-<!-- Task 4: Add More Steps -->
+### Task 4: Add More Steps
 
 ![alt text](image-1.png)
 
-<!-- Task 5: Break It On Purpose -->
+### Task 5: Break It On Purpose
 
 What does a failed pipeline look like?
 
@@ -33,6 +33,6 @@ Click the failed workflow run.
 Open the failed job and step.
 Read the logs to see the error message and exit code.
 
-Fix the Workflow
+**Fix the Workflow**
 
 ![alt text](image-2.png)
