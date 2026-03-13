@@ -1,6 +1,6 @@
 ### Task 2: Hello Workflow
 
-![alt text](image.png)
+![alt text](image-3.png)
 
 ### Task 3: Understand the Anatomy
 
